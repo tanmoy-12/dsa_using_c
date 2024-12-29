@@ -24,6 +24,8 @@ struct Node *insert(struct Node *r, int item){
         parrent=temp;
         if(item<temp->data)
             temp=temp->lchild;
+        else if(item>temp->data)
+            temp=temp->rchild;
         else
             temp=temp->rchild;
     }
@@ -31,37 +33,59 @@ struct Node *insert(struct Node *r, int item){
     else parrent->rchild=newNode;
     return r;
 }
-struct Node *delete(struct Node *r, int data){
-    if(r==NULL)return r;
-    if(r->rchild==NULL && r->lchild==NULL){
-        return r;}
+struct Node *minNode(struct Node *root){
+    if(root==NULL || root->lchild==NULL)return root;
+    struct Node *temp=root;
+    while(temp->lchild!=NULL)temp=temp->lchild;
+    return temp;
 }
-void inOrder(struct Node *r){
-    if(r!=NULL){
-        inOrder(r->lchild);
-        printf("%d ",r->data);
-        inOrder(r->rchild);
+struct Node *delete(struct Node *root, int data){
+    if(root==NULL)return root;
+    if(data<root->data)root->lchild = delete(root->lchild,data);
+    else if (data>root->data)root->rchild = delete(root->rchild,data);
+    else{
+        if(root->lchild==NULL){
+            struct Node *temp = root->rchild;
+            free(root);
+            return temp;
+        }
+        else if(root->rchild==NULL){
+            struct Node *temp = root->lchild;
+            free(root);
+            return temp;
+        }
+        else{
+            struct Node *succ=minNode(root->rchild);
+            root->data=succ->data;
+            root->rchild=delete(root->rchild,succ->data);
+            return root;
+        }
     }
+    return root;
 }
-void preOrder(struct Node *r){
-    if(r!=NULL){
-        printf("%d ",r->data);
-        preOrder(r->lchild);
-        preOrder(r->rchild);
-    }
+void inOrder(struct Node *root){
+    if(root == NULL)return;
+    inOrder(root->lchild);
+    printf("%d ",root->data);
+    inOrder(root->rchild);
 }
-void postOrder(struct Node *r){
-    if(r!=NULL){
-        postOrder(r->lchild);
-        postOrder(r->rchild);
-        printf("%d ",r->data);
-    }
+void preOrder(struct Node *root){
+    if(root == NULL)return;
+    printf("%d ",root->data);
+    preOrder(root->lchild);
+    preOrder(root->rchild);    
+}
+void postOrder(struct Node *root){
+    if(root == NULL)return;
+    postOrder(root->lchild);
+    postOrder(root->rchild);
+    printf("%d ",root->data);
 }
 int main(){
     int choice,item;
     struct Node *root=NULL;
     while(1){
-        printf("1.Insert\n2.Inorder\n3.PreOrder\n4.PostOrder\n5.Exit\nEnter your choice : ");
+        printf("1.Insert\n2.Inorder\n3.PreOrder\n4.PostOrder\n5.Delete\n0.Exit\nEnter your choice : ");
         scanf("%d",&choice);
         switch(choice){
             case 1:
@@ -82,6 +106,11 @@ int main(){
                 printf("\n");
                 break;
             case 5:
+                printf("Enter the item to delete: ");
+                scanf("%d",&item);
+                root=delete(root,item);
+                break;
+            case 0:
                 exit(0);
             default:
                 printf("Invalid Choice\n");
