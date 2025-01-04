@@ -43,7 +43,7 @@ void display(){
         return;
     }
     printf("Queue elements are: ");
-    for(i=((front+1)%MAX);i!=rear;i=(i+1)%MAX){
+    for(i=(front+1)%MAX;i!=rear;i=(i+1)%MAX){
         printf("%d ",queue[i]);
     }
     printf(" %d ",queue[rear]);
@@ -54,9 +54,11 @@ int main(){
     while (1)
     {
         int choice,item;
-        printf("Enter 1 to enqueue 2 to dequeue 3 to peek 4 to display 5 to exit : ");
+        printf("Enter 1 to enqueue 2 to dequeue 3 to peek 4 to display 0 to exit : ");
         scanf("%d",&choice);
         switch(choice){
+            case 0:
+                exit(0);
             case 1:
                 printf("Enter the element to enqueue: ");
                 scanf("%d",&item);
@@ -71,11 +73,8 @@ int main(){
             case 4:
                 display();
                 break;
-            case 5:
-                exit(0);
             default:
                 printf("Invalid choice\n");
         }
     }
-    
 }

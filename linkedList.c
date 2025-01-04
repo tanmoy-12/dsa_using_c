@@ -1,143 +1,161 @@
-//Linked list Implementation
 #include<stdio.h>
 #include<stdlib.h>
-typedef struct Node {
+#include<limits.h>
+struct Node {
     int data;
     struct Node* next;
-} Node;
-Node *createNode(int data){
-    Node* newNode = (Node*)malloc(sizeof(Node));
-    if(newNode == NULL){
-        printf("Memory Error\n");
-        exit(0);
-    }
+};
+struct Node *head = NULL;
+struct Node *createNode(int data){
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
     newNode->data = data;
     newNode->next = NULL;
     return newNode;
 }
-Node* addBeg(Node *r,int item){
-    Node* newNode = createNode(item);
-    if(r==NULL){
-        return newNode;
-    }
-    else{
-        newNode->next=r;
-        r=newNode;
-        return r;        
-    }
-}
-Node* addEnd(Node *r,int item){
-    Node* newNode = createNode(item);
-    if(r==NULL){
-        return newNode;
-    }
-    else{
-        Node* temp = r;
-        while(temp->next!=NULL){
-            temp = temp->next;
-        }
-        temp->next = newNode;
-        return r;
-    }
-}
-Node *delBeg(Node *r){
-    if(r==NULL){
-        printf("List is Empty\n");
-        return r;
-    }
-    Node *temp=r;
-    r=r->next;
-    free(temp);
-    return r;
-}
-Node *delEnd(Node *r){
-    if(r==NULL){
-        printf("List is Empty\n");
-        return r;
-    }
-    Node *temp=r;
-    if(temp->next==NULL){
-        r=r->next;
-        free(temp);
-        return r;
-    }
-    while(temp->next->next!=NULL){
-        temp=temp->next;
-    }
-    free(temp->next);
-    temp->next=NULL;
-    return r;
-}
-Node *delAny(Node *r,int item){
-    if(r==NULL){
-        printf("List is Empty\n");
-        return r;
-    }
-    Node* temp=r;
-    if(r->data==item){
-        r=r->next;
-        free(temp);
-        return r;
-    }
-    while(temp->next!=NULL && temp->next->data!=item){
-        temp=temp->next;
-    }
-    if(temp->next==NULL){
-        printf("Element not found\n");
-        return r;
-    }
-    Node* del=temp->next;
-    temp->next=temp->next->next;
-    free(del);
-    return r;
-}
-void display(Node *r){
-    if(r==NULL){
-        printf("List is Empty\n");
+void addBeg(int data){
+    struct Node* newNode = createNode(data);
+    if(head == NULL){
+        head = newNode;
         return;
     }
-    Node* temp=r;
-    printf("List elements are: ");
+    newNode->next = head;
+    head = newNode;
+}
+void addEnd(int data){
+    struct Node * newNode = createNode(data);
+    if(head == NULL){
+        head = newNode;
+        return;
+    }
+    struct Node* temp = head;
+    while(temp->next!=NULL){
+        temp = temp->next;
+    }
+    temp->next = newNode;
+}
+void delBeg(){
+    if(head == NULL)return;
+    struct Node* temp = head;
+    head = head->next;
+    free(temp);
+}
+void delEnd(){
+    if(head == NULL)return;
+    if(head->next == NULL){
+        free(head);
+        head = NULL;
+        return;
+    }
+    struct Node* temp = head;
+    while(temp->next->next!=NULL){
+        temp = temp->next;
+    }
+    free(temp->next);
+    temp->next = NULL;
+    return;
+}
+void display(){
+    struct Node* temp = head;
     while(temp!=NULL){
-        printf("%d ",temp->data);
-        temp=temp->next;
+        printf("%d ", temp->data);
+        temp = temp->next;
     }
     printf("\n");
 }
+void reverseList(){
+    if(head == NULL)return;
+    struct Node *curr = head, *prev = NULL, *next;
+    while(curr != NULL){
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    head = prev;
+}
+int search(int data){
+    if(head == NULL)return 0;
+    struct Node* temp = head;
+    while(temp!=NULL){
+        if(temp->data == data){
+            return 1;
+        }
+        temp = temp->next;
+    }
+    return 0;
+}
+int maximum(){
+    if(head == NULL)return INT_MIN;
+    struct Node* temp = head;
+    int max = head->data;
+    while(temp!=NULL){
+        if(temp->data > max)max = temp->data;
+        temp = temp->next;
+    }
+    return max;
+}
+int minimum(){
+    if(head == NULL)return INT_MAX;
+    struct Node* temp = head;
+    int min = head->data;
+    while(temp!=NULL){
+        if(temp->data < min)min = temp->data;
+        temp = temp->next;
+    }
+    return min;
+}
+int count(){
+    if(head == NULL)return 0;
+    int count = 0;
+    struct Node* temp = head;
+    while(temp!=NULL){
+        count++;
+        temp = temp->next;
+    }
+    return count;
+}
 int main(){
-    Node *r=NULL;
+    int item,choice;
     while(1){
-        int choice;
-        printf("Enter 1 to add at beginning 2 to add at end 3 to delete at beginning 4 to delete at end 5 to delete any node 6 to display 7 to exit : ");
+        printf("0. Exit\n1. Add at beginning\n2. Add at end\n3. Delete at beginning\n4. Delete at end\n5. Display\n6. Reverse\n7. Search\n8. Maximum\n9. Minimum\n10. Count Nodes\nEnter your choice : ");
         scanf("%d",&choice);
-        int item;
         switch(choice){
+            case 0:
+                exit(0);
             case 1:
-                printf("Enter the item : ");
+                printf("Enter an item to add at beginning: ");
                 scanf("%d",&item);
-                r=addBeg(r,item);
+                addBeg(item);
                 break;
             case 2:
-                printf("Enter the item : ");
+                printf("Enter an item to add at end: ");
                 scanf("%d",&item);
-                r=addEnd(r,item);
+                addEnd(item);
                 break;
             case 3:
-                r=delBeg(r);
+                delBeg();
                 break;
             case 4:
-                r=delEnd(r);
+                delEnd();
                 break;
             case 5:
-                printf("Enter the item to be deleted: ");
-                scanf("%d",&item);
-                r=delAny(r,item);
+                display();
                 break;
             case 6:
-                display(r);
+                reverseList();
                 break;
             case 7:
-                exit(0);
+                printf("Enter an item to search: ");
+                scanf("%d",&item);
+                break;;
+            case 8:
+                printf("The maximum value is %d\n",maximum());
+                break;
+            case 9:
+                printf("The minimum value is %d\n",minimum());
+                break;
+            case 10:
+                printf("The count of nodes is %d\n",count());
         }
     }
 }

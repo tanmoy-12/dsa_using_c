@@ -46,10 +46,13 @@ int main(){
     int item,choice;
     while (1)
     {
-        printf("Enter 1 to push 2 to pop 3 to peek 4 to exit : ");
+        printf("Enter 1 to push 2 to pop 3 to peek 4 to display 0 to exit : ");
         scanf("%d",&choice);
         switch (choice)
         {
+            case 0:
+                exit(0);
+                break;
             case 1:
                 printf("Enter the item : ");
                 scanf("%d",&item);
@@ -64,8 +67,6 @@ int main(){
             case 4:
                 display();
                 break;
-            case 5:
-                exit(0);
         }
     }
     
