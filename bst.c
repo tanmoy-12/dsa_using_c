@@ -81,11 +81,23 @@ void postOrder(struct Node *root){
     postOrder(root->rchild);
     printf("%d ",root->data);
 }
+int externalNodes(struct Node *root){
+    if(root==NULL)return 0;
+    if(root->lchild==NULL && root->rchild==NULL)
+        return 1;
+    return externalNodes(root->lchild)+externalNodes(root->rchild);
+}
+ int internalNodes(struct Node *root){
+    if(root==NULL)return 0;
+    if(root->lchild!=NULL || root->rchild!=NULL)
+        return 1+internalNodes(root->lchild)+internalNodes(root->rchild);
+    return 0;
+ }
 int main(){
     int choice,item;
     struct Node *root=NULL;
     while(1){
-        printf("1.Insert\n2.Inorder\n3.PreOrder\n4.PostOrder\n5.Delete\n0.Exit\nEnter your choice : ");
+        printf("1.Insert\n2.Inorder\n3.PreOrder\n4.PostOrder\n5.Delete\n6. Internal Nodes\n7. External Node\n0.Exit\nEnter your choice : ");
         scanf("%d",&choice);
         switch(choice){
             case 1:
@@ -110,6 +122,10 @@ int main(){
                 scanf("%d",&item);
                 root=delete(root,item);
                 break;
+            case 6:
+                printf("Internal Nodes: %d\n", internalNodes(root));
+            case 7:
+                printf("External Nodes: %d\n", externalNodes(root));
             case 0:
                 exit(0);
             default:

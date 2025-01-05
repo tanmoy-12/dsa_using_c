@@ -63,7 +63,7 @@ void convertToPostfix(char *input) {
         } else if (c == ')') {
             while (peek() != '(')
                 result[++j] = pop();
-            pop(); // Remove '('
+            pop(); 
         } else {
             while (top != -1 && precedence(peek()) >= precedence(c) && peek() != '(')
                 result[++j] = pop();
@@ -75,7 +75,7 @@ void convertToPostfix(char *input) {
     while (top != -1) {
         result[++j] = pop();
     }
-    result[++j] = '\0'; // Null-terminate the result
+    result[++j] = '\0'; 
 }
 
 int main() {
