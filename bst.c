@@ -92,12 +92,18 @@ int externalNodes(struct Node *root){
     if(root->lchild!=NULL || root->rchild!=NULL)
         return 1+internalNodes(root->lchild)+internalNodes(root->rchild);
     return 0;
- }
+}
+int search(struct  Node *root, int key){
+    if(root==NULL)return 0;
+    if(root->data==key)return 1;
+    if(search<root->data)return search(root->lchild,key);
+    else return search(root->rchild,key);
+}
 int main(){
     int choice,item;
     struct Node *root=NULL;
     while(1){
-        printf("1.Insert\n2.Inorder\n3.PreOrder\n4.PostOrder\n5.Delete\n6. Internal Nodes\n7. External Node\n0.Exit\nEnter your choice : ");
+        printf("1.Insert\n2.Inorder\n3.PreOrder\n4.PostOrder\n5.Delete\n6. Internal Nodes\n7. External Node\n8. Search Element \n0.Exit\nEnter your choice : ");
         scanf("%d",&choice);
         switch(choice){
             case 1:
