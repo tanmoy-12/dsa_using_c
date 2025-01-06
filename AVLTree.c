@@ -108,13 +108,13 @@ struct Node *insert(struct Node *r, int key){
     }
     r->height = 1 + max(height(r->lchild), height(r->rchild));
     int balance = getBalance(r);
-    if(balance < -1 && getBalance(r->rchild) <= 0) return rotateLeft(r);
-    if(balance > 1 && getBalance(r->lchild) >= 0) return rotateRight(r);
-    if(balance > 1 && getBalance(r->lchild) < 0){
+    if(balance < -1 && getBalance(r->rchild) <= 0) return rotateLeft(r); // RR Case
+    if(balance > 1 && getBalance(r->lchild) >= 0) return rotateRight(r); // LL Case
+    if(balance > 1 && getBalance(r->lchild) < 0){ // LR Case
         r->lchild = rotateLeft(r->lchild);
         return rotateRight(r);
     }
-    if(balance < -1 && getBalance(r->rchild) > 0){
+    if(balance < -1 && getBalance(r->rchild) > 0){ //RL Case
         r->rchild = rotateRight(r->rchild);
         return rotateLeft(r);
     }

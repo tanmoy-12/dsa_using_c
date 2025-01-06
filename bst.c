@@ -33,6 +33,13 @@ struct Node *insert(struct Node *r, int item){
     else parrent->rchild=newNode;
     return r;
 }
+//Insertion Using Recursive Approach
+struct Node* insertion(struct Node *r, int item){
+    if(r == NULL)return createNode(item);
+    if(item < r->data)r->lchild = insert(r->lchild, item);
+    else if(item > r->data)r->rchild = insert(r->rchild, item);
+    else return r;
+}
 struct Node *minNode(struct Node *root){
     if(root==NULL || root->lchild==NULL)return root;
     struct Node *temp=root;
